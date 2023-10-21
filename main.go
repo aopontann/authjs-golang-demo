@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/redis/go-redis/v9"
@@ -46,6 +47,12 @@ func main() {
 	opt, _ := redis.ParseURL(os.Getenv("UPSTASH_REDIS_PARSE_URL"))
 	rdb = redis.NewClient(opt)
 
-	http.HandleFunc("/", Hello)
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			s := time.Now()
+			Hello(w, r)
+			fmt.Printf("process time: %s\n", time.Since(s))
+		}
+	})
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }
