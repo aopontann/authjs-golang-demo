@@ -1,16 +1,10 @@
 import { NextAuthOptions } from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import GithubProvider from "next-auth/providers/github"
-import { UpstashRedisAdapter } from "@auth/upstash-redis-adapter"
-import { Redis } from "@upstash/redis"
-
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_URL || "",
-  token: process.env.UPSTASH_REDIS_TOKEN || ""
-})
+import { FirestoreAdapter } from "@auth/firebase-adapter"
 
 export const options: NextAuthOptions = {
-  adapter: UpstashRedisAdapter(redis),
+  adapter: FirestoreAdapter(),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID || "",
